@@ -5,20 +5,22 @@ import {TodoForm, TodoList, Footer} from './components/todo';
 import {addTodo, generateId, findById, toggleTodo, updateTodo, removeTodo, filterTodos} from './lib/todoHelpers';
 import {pipe, partial} from './lib/utils';
 import PropTypes from 'prop-types';
+import {loadTodos} from './lib/todoService';
 
 class App extends Component {
 	state = {
-		todos: [
-			{id: 1, name: 'Learn JSX', isComplete: true},
-			{id: 2, name: 'Build an Awesome App', isComplete: false},
-			{id: 3, name: 'Ship It!', isComplete: false}
-		],
+		todos: [],
 		currentTodo: ''
 	};
 
 	static contextTypes = {
 		route: PropTypes.string
 	};
+
+	componentDidMount() {
+		loadTodos()
+			.then(todos => this.setState({todos}));
+	}
 
 	handleRemove = (id, e) => {
 		e.preventDefault();
